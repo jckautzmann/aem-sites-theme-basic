@@ -36,4 +36,4 @@ jobs:
           SALT: ${{ steps.env_vars.outputs.SALT }}
           HASH: ${{ steps.hash.outputs.HASH }}
           URL: ${{ secrets.URL }}
-        run: npm run dotenv -- cross-var curl -d 'site=%SITE%' -d 'artifact=%GIT_ARTIFACT_ID%' -d 'salt=%SALT%' -d 'hash=%HASH%' %URL%/aem/update.theme.html
+        run: curl -d 'site=%SITE%' -d 'artifact=%GIT_ARTIFACT_ID%' -d 'salt=%SALT%' -d 'hash=%HASH%' %URL%/aem/update.theme.html
