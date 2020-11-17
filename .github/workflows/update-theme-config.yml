@@ -20,15 +20,16 @@ jobs:
           echo ::set-output name=ARTIFACT_ID::$(curl ${{ github.api_url }}/repos/${{ github.repository }}/actions/runs/${{ github.event.client_payload.deployed_theme_run_id }}/artifacts -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' | jq -r '.artifacts[0].id')
           echo ::set-output name=GIT_ORG::$(echo "${{ github.repository }}" | awk -F / '{print $1}')
           echo ::set-output name=GIT_REPO::$(echo "${{ github.repository }}" | awk -F / '{print $2}')
+          echo ::set-output name=GIT_TOKEN::$(echo "${{ secrets.GIT_TOKEN }}")
+          echo ::set-output name=SALT::$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 16 ; echo)
+          echo ::set-output name=STRING_TO_HASH::$(echo $GIT_ORG$GIT_REPO$GIT_TOKEN$SALT)
+          echo ::set-output name=HASH::$(echo -n $STRING_TO_HASH | openssl dgst -sha256)
 
       - name: Updated theme path
         env:
-          GIT_ARTIFACT_ID: ${{ steps.env_vars.outputs.ARTIFACT_ID }}
-          GIT_ORG: ${{ steps.env_vars.outputs.GIT_ORG }}
-          GIT_REPO: ${{ steps.env_vars.outputs.GIT_REPO }}
-          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
-          URL: ${{ secrets.URL }}
-          AEM_USER: ${{ secrets.AEM_USER }}
-          AEM_PASS: ${{ secrets.AEM_PASS }}
           SITE: ${{ secrets.SITE }}
-        run: npm run deploy
+          GIT_ARTIFACT_ID: ${{ steps.env_vars.outputs.ARTIFACT_ID }}
+          SALT: ${{ steps.env_vars.outputs.SALT }}
+          HASH: ${{ steps.env_vars.outputs.HASH }}
+          URL: ${{ secrets.URL }}
+        run: npm run dotenv -- cross-var curl -d 'site=%SITE%' -d 'artifact=%GIT_ARTIFACT_ID%' -d 'salt=%SALT%' -d 'hash=%HASH%' %URL%/aem/update.theme.html
