@@ -26,8 +26,7 @@ jobs:
       - name: Compute hash
         id: hash
         run: |
-          echo ::set-output name=STRING_TO_HASH::$(echo "${{ steps.env_vars.outputs.GIT_ORG }}${{ steps.env_vars.outputs.GIT_REPO }}${{ steps.env_vars.outputs.GIT_TOKEN }}${{ steps.env_vars.outputs.SALT }}")
-          echo ::set-output name=HASH::$(echo -n "$STRING_TO_HASH" | openssl dgst -sha256)
+          echo ::set-output name=HASH::$(echo -n "${{ steps.env_vars.outputs.GIT_ORG }}${{ steps.env_vars.outputs.GIT_REPO }}${{ steps.env_vars.outputs.GIT_TOKEN }}${{ steps.env_vars.outputs.SALT }}" | openssl dgst -sha256)
 
       - name: Updated theme path
         env:
@@ -37,7 +36,6 @@ jobs:
           GIT_REPO: ${{ steps.env_vars.outputs.GIT_REPO }}
           GIT_TOKEN: ${{ steps.env_vars.outputs.GIT_TOKEN }}
           SALT: ${{ steps.env_vars.outputs.SALT }}
-          STRING_TO_HASH: ${{ steps.hash.outputs.STRING_TO_HASH }}
           HASH: ${{ steps.hash.outputs.HASH }}
           URL: ${{ secrets.URL }}
         run: dotenv -- cross-var curl -d 'site=%SITE%' -d 'artifact=%GIT_ARTIFACT_ID%' -d 'salt=%SALT%' -d 'hash=%HASH%' %URL%/aem/update.theme.html
