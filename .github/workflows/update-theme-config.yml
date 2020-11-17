@@ -23,6 +23,7 @@ jobs:
           echo ::set-output name=GIT_TOKEN::$(echo "${{ secrets.GIT_TOKEN }}")
           echo ::set-output name=SALT::$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 16 ; echo)
           echo ::set-output name=STRING_TO_HASH::$(echo "$GIT_ORG$GIT_REPO$GIT_TOKEN$SALT")
+          echo ::set-output name=STRING_TO_HASH::$(echo "${{ steps.env_vars.outputs.GIT_ORG }}${{ steps.env_vars.outputs.GIT_REPO }}${{ steps.env_vars.outputs.GIT_TOKEN }}")
           echo ::set-output name=HASH::$(echo -n "$STRING_TO_HASH" | openssl dgst -sha256)
 
       - name: Updated theme path
