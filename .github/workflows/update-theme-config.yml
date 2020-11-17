@@ -37,7 +37,7 @@ jobs:
           GIT_REPO: ${{ steps.env_vars.outputs.GIT_REPO }}
           GIT_TOKEN: ${{ steps.env_vars.outputs.GIT_TOKEN }}
           SALT: ${{ steps.env_vars.outputs.SALT }}
-          STRING_TO_HASH: ${{ steps.env_vars.outputs.STRING_TO_HASH }}
-          HASH: ${{ steps.env_vars.outputs.HASH }}
+          STRING_TO_HASH: ${{ steps.hash.outputs.STRING_TO_HASH }}
+          HASH: ${{ steps.hash.outputs.HASH }}
           URL: ${{ secrets.URL }}
         run: dotenv -- cross-var curl -d 'site=%SITE%' -d 'artifact=%GIT_ARTIFACT_ID%' -d 'salt=%SALT%' -d 'hash=%HASH%' %URL%/aem/update.theme.html
