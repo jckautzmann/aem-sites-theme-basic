@@ -34,4 +34,4 @@ jobs:
           EXPIRATION: ${{ steps.env_vars.outputs.EXPIRATION }}
           HASH: ${{ steps.hash_var.outputs.HASH }}
           URL: ${{ secrets.URL }}
-        run: curl -d 'site=${{ secrets.SITE }}' -d 'artifact=${{ steps.env_vars.outputs.ARTIFACT_ID }}' -d 'expiration=${{ steps.env_vars.outputs.EXPIRATION }}' -d 'hash=${{ steps.hash_var.outputs.HASH }}' ${{ secrets.URL }}/aem/update.theme.html
+        run: npx aem-site-theme-builder deploy
