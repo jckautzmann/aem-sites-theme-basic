@@ -6,18 +6,14 @@
     "main": "src/main.ts",
     "license": "MIT License, Copyright 2020 Adobe Systems Incorporated",
     "scripts": {
-        "dev": "webpack -d --env dev --config ./webpack.dev.js",
-        "dev-watch": "watch 'npm run dev' src",
-        "live": "npm-run-all -p dev-watch proxy:wait",
-        "proxy": "aem-site-theme-builder live",
-        "proxy:wait": "sleep 1 && npm run proxy",
-        "prod": "webpack -p --config ./webpack.prod.js",
-        "deploy": "aem-site-theme-builder deploy"
+        "build": "webpack -p --config ./webpack.prod.js",
+        "live": "watch 'webpack -d --env dev --config ./webpack.dev.js' src & aem-site-theme-builder live & browser-sync start --proxy 'localhost:7000' --files 'dist'"
     },
     "devDependencies": {
-        "@adobe/aem-site-theme-builder": "2.0.2",
+        "@adobe/aem-site-theme-builder": "3.0.0",
         "autoprefixer": "^9.2.1",
         "bestzip": "^2.1.6",
+        "browser-sync": "^2.26.13",
         "clean-webpack-plugin": "^3.0.0",
         "copy-webpack-plugin": "^5.0.4",
         "cross-var": "^1.1.0",
@@ -27,6 +23,7 @@
         "html-webpack-plugin": "^3.2.0",
         "mini-css-extract-plugin": "^0.4.4",
         "node-sass": "^4.11.0",
+        "normalize.css": "8.0.1",
         "npm-run-all": "^4.1.5",
         "optimize-css-assets-webpack-plugin": "^5.0.1",
         "postcss-loader": "^3.0.0",
